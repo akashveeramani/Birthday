@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>The Question</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+    <style>
+        html,body { height:100%; margin:0; }
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(180deg,#08122a 0%,#0c1836 60%,#061129 100%);
+            overflow:hidden;
+            color: #f9f6f2;
+        }
+
+        .moon {
+            position:fixed; right:8%; top:6%; width:320px; height:320px; border-radius:50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,230,0.15), rgba(255,230,200,0.05) 30%, rgba(10,10,30,0) 60%);
+            filter: blur(30px);
+            pointer-events:none;
+        }
+
+        /* center content */
+        .wrap { height:100%; display:flex; align-items:center; justify-content:center; }
+        .card {
+            width: min(1000px, 90%);
+            text-align:center;
+            padding:40px 30px;
+            backdrop-filter: blur(6px);
+        }
+
+        .question {
+            font-size:48px; font-style:italic; color: #fff8e8; text-shadow: 0 6px 30px rgba(255,235,200,0.06);
+            max-width: 900px; margin: 0 auto; line-height:1.1;
+            opacity:0; white-space:pre-wrap;
+        }
+
+        .cursor { display:inline-block; width:10px; height:1.2em; background:#fff8e8; margin-left:6px; vertical-align:middle; animation:blink 1s steps(2) infinite; }
+        @keyframes blink { 0%,50% {opacity:1} 51%,100% {opacity:0} }
+
+        .answers { display:flex; gap:30px; justify-content:center; margin-top:30px; opacity:0; }
+        .glass {
+            width:260px; min-height:90px; padding:18px; border-radius:14px; cursor:pointer;
+            background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 8px 30px rgba(2,6,20,0.6);
+            color:#fff; transition:transform .25s ease, box-shadow .25s ease;
+            backdrop-filter: blur(6px);
+        }
+        .glass:hover { transform: translateY(-8px) scale(1.02); box-shadow:0 18px 40px rgba(2,6,20,0.7); }
+
+        /* stars container */
+        .stars { position:fixed; inset:0; pointer-events:none; }
+        .star { position:absolute; width:2px; height:2px; background:white; border-radius:50%; opacity:0.9; box-shadow:0 0 6px rgba(255,255,255,0.6); animation:twinkle 3s infinite; }
+        @keyframes twinkle { 0%{opacity:.2}50%{opacity:1}100%{opacity:.2} }
+
+        /* transitions */
+        .fade-out { animation:fadeOut 0.8s ease forwards; }
+        @keyframes fadeOut { from{opacity:1} to{opacity:0} }
+
+        @media (max-width:768px){ .question{font-size:28px} .answers{flex-direction:column} .glass{width:90%} }
+    </style>
+</head>
+<body>
+    <div class="moon"></div>
+    <div class="stars" id="stars"></div>
+
+    <div class="wrap">
+        <div class="card">
+            <div id="questionText" class="question"></div><span id="cursor" class="cursor"></span>
+                Nee yeppayummey kepala yethuku na unna Love pannuren nu. Athuku answer pannalam ah?
+            <div class="answers" id="answers">
+                <div class="glass" data-answer="yes">Yes — with all my heart</div>
+                <div class="glass" data-answer="always">Always — forever and ever</div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="burst" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+
+    <script>
+        // starfield
+        const starsEl = document.getElementById('stars');
+        const STAR_COUNT = 80;
+        for(let i=0;i<STAR_COUNT;i++){
+            const s = document.createElement('div'); s.className='star';
+            const x = Math.random()*100; const y = Math.random()*100; const sz = (Math.random()*2)+1;
+            s.style.left = x+'%'; s.style.top = y+'%'; s.style.width = sz+'px'; s.style.height = sz+'px';
+            s.style.animationDelay = (Math.random()*3)+'s'; s.style.opacity = 0.2 + Math.random()*0.9;
+            starsEl.appendChild(s);
+        }
+
+        // typewriter question
+        const question = "Nee yeppayummey kepala yethuku na unna Love pannuren nu. Athuku answer pannalam ah?";
+        const qEl = document.getElementById('questionText');
+        const cursor = document.getElementById('cursor');
+        let qi=0;
+        function typeChar(){
+            if(qi<question.length){ qEl.textContent += question.charAt(qi); qi++; setTimeout(typeChar, 60); }
+            else { cursor.style.display='none'; onTypeComplete(); }
+        }
+        window.addEventListener('load', ()=>{ setTimeout(typeChar, 600); resizeCanvas(); });
+
+        // reveal answers after typewriter+2s
+        function onTypeComplete(){ setTimeout(()=>{ document.getElementById('answers').style.transition='opacity 0.8s'; document.getElementById('answers').style.opacity='1'; },2000); }
+
+        // heart burst canvas
+        const c = document.getElementById('burst'); const ctx = c.getContext('2d'); let parts=[];
+        function resizeCanvas(){ c.width = innerWidth; c.height = innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+
+        function spawnBurst(x,y){
+            parts = [];
+            for(let i=0;i<60;i++){
+                parts.push({x,y, vx:(Math.random()-0.5)*6, vy:(Math.random()-1.5)*6, life:60+Math.random()*30, color: `hsl(${330+Math.random()*40},80%,60%)`});
+            }
+            let t=0; const id = setInterval(()=>{ t++; ctx.clearRect(0,0,c.width,c.height); for(let p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.15; p.life--; ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(0,3*(p.life/80)),0,Math.PI*2); ctx.fill(); } if(t>90){ clearInterval(id); ctx.clearRect(0,0,c.width,c.height); } },16);
+        }
+
+        // clicking answer triggers burst and navigate
+        document.getElementById('answers').addEventListener('click', (e)=>{
+            const g = e.target.closest('.glass'); if(!g) return;
+            const rect = g.getBoundingClientRect(); const cx = rect.left + rect.width/2; const cy = rect.top + rect.height/2;
+            spawnBurst(cx, cy);
+            // small excitement pulse
+            g.style.transform = 'scale(1.03) translateY(-6px)'; setTimeout(()=>g.style.transform='',300);
+            setTimeout(()=>{ document.body.classList.add('fade-out'); setTimeout(()=>location.href='page4.html',900); },1000);
+        });
+
+        // gentle resize and start
+        resizeCanvas();
+    </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farewell Night</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 183, 77, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 150, 136, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(255, 105, 180, 0.2) 0%, transparent 50%),
+                        linear-gradient(180deg, #1a1a2e, #16213e);
+            background-size: 100% 100%;
+            background-attachment: fixed;
+            color: #fff;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Bokeh circles - decorative */
+        .bokeh {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.15;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 183, 77, 0.2);
+            border: 2px solid #ffb74d;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Lora', serif;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 183, 77, 0.4);
+            box-shadow: 0 0 20px rgba(255, 183, 77, 0.6);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #ffb74d;
+            text-shadow: 0 0 20px rgba(255, 183, 77, 0.5);
+        }
+
+        .messages {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .message {
+            display: flex;
+            animation: fadeInMessage 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .message:nth-child(1) { animation-delay: 0.2s; }
+        .message:nth-child(2) { animation-delay: 0.4s; }
+        .message:nth-child(3) { animation-delay: 0.6s; }
+        .message:nth-child(4) { animation-delay: 0.8s; }
+        .message:nth-child(5) { animation-delay: 1s; }
+        .message:nth-child(6) { animation-delay: 1.2s; }
+        .message:nth-child(7) { animation-delay: 1.4s; }
+
+        @keyframes fadeInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.left {
+            justify-content: flex-start;
+        }
+
+        .message.right {
+            justify-content: flex-end;
+        }
+
+        .bubble {
+            max-width: 60%;
+            padding: 20px;
+            border-radius: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .left .bubble {
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            color: white;
+        }
+
+        .left .bubble::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 15px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #42a5f5;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .right .bubble {
+            background: linear-gradient(135deg, #ff7043, #ff6e40);
+            color: white;
+        }
+
+        .right .bubble::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 15px;
+            width: 0;
+            height: 0;
+            border-right: 10px solid #ff6e40;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        /* Pamphlet Section */
+        .pamphlet-section {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #00bcd4;
+        }
+
+        .pamphlets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .pamphlet {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .pamphlet:hover {
+            transform: translateY(-10px);
+        }
+
+        .pamphlet-header {
+            background: linear-gradient(135deg, #ffb74d, #ffa726);
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+            border: 3px solid #ff9800;
+            margin-bottom: 10px;
+        }
+
+        .pamphlet-frame {
+            background: white;
+            border: 3px double #00bcd4;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .pamphlet-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #f3f3f3;
+            display: none;
+        }
+
+        .pamphlet-image.loaded {
+            display: block;
+        }
+
+        .pamphlet-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e3f2fd, #b3e5fc);
+            color: #00838f;
+            font-size: 18px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .pamphlet-bottom {
+            background: repeating-linear-gradient(
+                90deg,
+                #ff9800,
+                #ff9800 10px,
+                #ffb74d 10px,
+                #ffb74d 20px
+            );
+            height: 15px;
+            border-top: 2px solid #ff9800;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px auto;
+            }
+
+            h1 {
+                font-size: 32px;
+                margin-bottom: 40px;
+            }
+
+            .message {
+                max-width: 100%;
+            }
+
+            .bubble {
+                max-width: 85%;
+                padding: 15px;
+                font-size: 16px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .pamphlets {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative bokeh -->
+    <div class="bokeh" style="width: 300px; height: 300px; background: #ff9800; top: 10%; left: 10%;"></div>
+    <div class="bokeh" style="width: 250px; height: 250px; background: #ffb74d; top: 60%; right: 15%;"></div>
+    <div class="bokeh" style="width: 200px; height: 200px; background: #00bcd4; top: 50%; left: 20%;"></div>
+    <div class="bokeh" style="width: 280px; height: 280px; background: #ff6e40; bottom: 10%; right: 10%;"></div>
+
+    <button class="back-btn" onclick="history.back()">← Back</button>
+
+    <div class="container">
+        <h1>🎉 Farewell Night</h1>
+
+        <div class="messages">
+            <div class="message left">
+                <div class="bubble">5th April 2023, Life la marakkavey mudiyatha naal. Yennoda life ye complete ah change panna naal. 
+                    Nammaloda farewell celebration.</div>
+            </div>
+
+            <div class="message right">
+                <div class="bubble">Nammaloda long distance start ana konja naal la ye nammaloda farewell vach changa. Unga amma yenna 
+                    than poga vendam nu sonnalum nee yennakaga yennakaga matum avanga kuda sanda potu chennai ku vantha.</div>
+            </div>
+
+            <div class="message left">
+                <div class="bubble">Literally na la nee varanu therinja thu guthikatha neeram mey illa. Avlo happy ah irunthen. 
+                    Anniku nee chennai vanthuten nu photos anupunathum na la dress la mathi mathi yethu pota nalla irukkum yethu match 
+                    agum ippadi la romba romba yosichitey irunthen. Finally ready agi kelambiten.</div>
+            </div>
+
+            <div class="message right">
+                <div class="bubble">Aporo vasanth and vijay late panni anga late ah than vanthaney. Na correct ah school la enter agum 
+                    bothu unga amma exit aguranga. Unna pakka vara excitement la yethumey therila. Avlo excitement la auditorium door 
+                    open panni unna yen kannu avlo theduchu.</div>
+            </div>
+
+            <div class="message left">
+                <div class="bubble">Sudden ah nee yenna thirumbi patha and nanum unna pathen apo iruntha happiness ah measure ye panna 
+                    mudiyathu. And event start anathula irunthu na unna matummey than pathutu irunthen. Nee sikikurathu nee pesurathu 
+                    unnoda thodu unnoda dress yella thaiyum pathute irunthen panda.</div>
+            </div>
+
+            <div class="message right">
+                <div class="bubble">Aporo nee time aiduchu nu kelambita nu friend pathanga and kelambitiya nu nanum kelambi restroom 
+                    la ye wait pannitu irunthen  nee varuva namma pesalam nu. Ana nee full tensed state la irunthen yenna kannapinna 
+                    nu thituna.</div>
+            </div>
+
+            <div class="message left">
+                <div class="bubble">Unnoda kasta romba perusu nee yennakaga avlo thitu vangi inga vanthu pesa mudiyamma ponnathu 
+                    unnaku yevlo kasta ma irukkum nu yennaku nallavey purithu ana apo yennala yethuvummey panna mudila panda.</div>
+            </div>
+
+            <div class="message right">
+                <div class="bubble">Nee ponathu yennaku oru 15 to 20 mins full blank ah aiduchu panda unnaku na msg pannite 
+                    nee azhuthathu pathu yen naan la uyiroda irukkuren appdinga level ku mind depressed aiduchu panda.</div>
+            </div>
+
+            <div class="message left">
+                <div class="bubble">Yennku munnadi la iruthey nee illa ma irukka mudiyathu nu nalla theriyum. Anniku night 
+                    nee nambaluku ithula set agathu break up pannikalam innimey namma pesavey vendam nu sollum bothu la yennoda 
+                    oodambula irunthu uyir ah matum yedukkura mari feel achu panda. Na anniku un kitta avlo beg pannalana unna 
+                    mari ivlo caring ana pondati and friend kedaichu irukkavey mata panda. </div>
+            </div>
+
+            <div class="message right">
+                <div class="bubble">Anniku nanum neeyum hope vidama irunthathu iniki namma life la happy ah irukkurom. Forever 
+                    I will remember this day.</div>
+            </div>
+        </div>
+
+        <div class="pamphlet-section">
+            <h2 class="section-title">Unforgettable Moments</h2>
+
+            <div class="pamphlets">
+                <div class="pamphlet">
+                    <div class="pamphlet-header">🌟 THE PARTY</div>
+                    <div class="pamphlet-frame">
+                        <img class="pamphlet-image loaded" src="images/1.jpeg" alt="Farewell" onerror="this.onerror=null;this.src='https://picsum.photos/350/280?random=11'">
+                    </div>
+                    <div class="pamphlet-bottom"></div>
+                </div>
+
+                <div class="pamphlet">
+                    <div class="pamphlet-header">💫 LAUGHTER</div>
+                    <div class="pamphlet-frame">
+                        <img class="pamphlet-image loaded" src="images/3.jpeg" alt="Farewell" onerror="this.onerror=null;this.src='https://picsum.photos/350/280?random=12'">
+                    </div>
+                    <div class="pamphlet-bottom"></div>
+                </div>
+
+                <div class="pamphlet">
+                    <div class="pamphlet-header">💕 FUN</div>
+                    <div class="pamphlet-frame">
+                        <img class="pamphlet-image loaded" src="images/4.jpeg" alt="Farewell" onerror="this.onerror=null;this.src='https://picsum.photos/350/280?random=13'">
+                    </div>
+                    <div class="pamphlet-bottom"></div>
+                </div>
+
+                <div class="pamphlet">
+                    <div class="pamphlet-header">✨ FOREVER</div>
+                    <div class="pamphlet-frame">
+                        <img class="pamphlet-image loaded" src="images/2.jpeg" alt="Farewell" onerror="this.onerror=null;this.src='https://picsum.photos/350/280?random=14'">
+                    </div>
+                    <div class="pamphlet-bottom"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // No file upload functionality needed
+    </script>
+</body>
+</html>

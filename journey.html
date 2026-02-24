@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: 
+                radial-gradient(ellipse 200% 200% at 20% 50%, rgba(184, 134, 11, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse 200% 200% at 80% 80%, rgba(139, 90, 43, 0.15) 0%, transparent 50%),
+                linear-gradient(135deg, #f5f0e6 0%, #e8dcc4 50%, #d4c4b0 100%);
+            background-size: 100% 100%;
+            background-attachment: fixed;
+            color: #3d2817;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Vintage map texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100, 50, 20, 0.02) 2px, rgba(100, 50, 20, 0.02) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(100, 50, 20, 0.02) 2px, rgba(100, 50, 20, 0.02) 4px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(184, 134, 11, 0.8);
+            border: 2px solid #6f5c3e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(184, 134, 11, 1);
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.6);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Departure Block */
+        .departure {
+            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+            color: #e8dcc4;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 80px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .departure-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .departure-location {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 48px;
+            color: #b8860b;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .departure-text {
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #b8860b, #8b6914, #b8860b);
+            z-index: 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeInTimeline 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInTimeline {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+        .timeline-item:nth-child(5) { animation-delay: 1s; }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #b8860b;
+            border: 4px solid #f5f0e6;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px #b8860b;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 30px;
+            background: rgba(245, 240, 230, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .timeline-title {
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+            font-weight: 700;
+            color: #6f5c3e;
+            margin-bottom: 10px;
+            transform: rotate(-1deg);
+        }
+
+        .timeline-text {
+            font-family: 'Caveat', cursive;
+            font-size: 18px;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            transform: rotate(0.5deg);
+        }
+
+        /* Polaroid Photo */
+        .photo-upload {
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .polaroid {
+            background: white;
+            border: 12px solid white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: rotate(-3deg);
+            position: relative;
+            aspect-ratio: 4 / 5;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid:hover {
+            transform: rotate(-3deg) translateY(-5px);
+        }
+
+        .polaroid-image {
+            width: 100%;
+            height: 85%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .polaroid-image.loaded {
+            display: block;
+        }
+
+        .polaroid-placeholder {
+            width: 100%;
+            height: 85%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8dcc4, #d4c4b0);
+            color: #8b6914;
+            font-size: 24px;
+        }
+
+        .polaroid-caption {
+            width: 100%;
+            height: 15%;
+            padding: 10px;
+            font-family: 'Caveat', cursive;
+            font-size: 16px;
+            color: #6f5c3e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Destination Block */
+        .destination {
+            background: linear-gradient(135deg, #b8860b, #8b6914);
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+            margin-top: 80px;
+            border-radius: 10px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 2px dashed #f5f0e6;
+        }
+
+        .destination-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .destination-location {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 56px;
+            color: #f5f0e6;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .destination-text {
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 80px;
+            height: 100px;
+            border: 2px dashed #f5f0e6;
+            background: linear-gradient(45deg, #d4a574, #b8860b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            transform: rotate(15deg);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .destination-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-content {
+                width: calc(100% - 40px);
+                margin-left: 40px !important;
+                margin-right: 0 !important;
+            }
+
+            .timeline-dot {
+                left: 0;
+            }
+
+            .departure-location {
+                font-size: 32px;
+            }
+
+            .destination-location {
+                font-size: 36px;
+            }
+
+            .destination-photos {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">← BACK</button>
+
+    <div class="container">
+        <!-- Departure -->
+        <div class="departure">
+            <div class="departure-icon">✈️</div>
+            <div class="departure-location">Our First Date</div>
+            <div class="departure-text">
+                Neeyum nanum after 3 years of missing eachother. Yevlo problems vanthalum, oru tharuku oru thar physical ah meet panna mudiyamma,
+                evlo la feel pannunom nu nammaluku than theriyum, yellarum long distance la kastam pa yenna than true ah love pannunalum oru naal athu 
+                bore adichidum nu neraiya reels la and some know people la sonanga, Ana oru oru vaati ippadi la solluratha kekum bothu yennku thought
+                la varathu orey oru vishiyam than yennavida unna yaralum love panna mudiyathu and unna vida yenna yaralum love panna mudiyathu. 
+                Oru oru vaati sanda podum bothum at night definitely yennakkaga neeyum and unna kaga nanum vitu kuduthu porathu than nammaloda love 
+                ivlo strong ah irukkurathu ku main reason. After so many hardships unna pakka vantha journey oda oru kutty story.
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Stage 1: Off to Bhubaneshwar</div>
+                    <div class="timeline-text">
+                        One week munnadila irunthey naan la full ah paranthutey than irunthen yennala words la express panna mudiyatha 
+                        alavuku happy ah irunthen. Finally 24, December 2025 nanum vasanth thum train la kelambitom. Ana first twist train
+                        la yengaloda ticket automatic ah cancel aayiduchu sollitanga, oru nimisham yennakum vasanth kum mini heart attack ye 
+                        vanthuduchu. Yenna pannurathu yellamey set panni ippo poga mudilanu avlo feel achu panda yetho world ah nikkura mari.
+                        Ana yenna yenna problem vanthalum pathukalam nu start pannom journey ah. Vasanth yen kuda iruntha orey oru reason na la
+                        than yenna annalum pathukalam nu neraiya problem face panni Bhubaneshwar la 25th December 2025 namma meet pannunom.
+                    </div>
+                    <div class="photo-upload">
+                        <div class="polaroid">
+                            <img class="polaroid-image loaded" src="images/15.jpeg" alt="Memory">
+                            <div class="polaroid-caption">Bus to Bhubaneshwar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Stage 2: First Meeting</div>
+                    <div class="timeline-text">
+                       After 3 years of long distance, na yennoda panda va pathen in real. Yellamey dream mari irunthuchu. Kadavul avlo
+                       problem kuduthum final ah unnayum yennayum meet panna vachitaru athuvum avaroda place la ye. First time unna
+                       3 years ku aporom ma pathu felt like pure dream panda.
+                    </div>
+                    <div class="photo-upload">
+                        <div class="polaroid">
+                            <img class="polaroid-image loaded" src="images/16.jpeg" alt="Memory">
+                            <div class="polaroid-caption">Church that made our souls meet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Stage 3: Through Struggles</div>
+                    <div class="timeline-text">
+                        Neeyum nanum oru naal kuda kastapadama irunthathey illa panda, Each and every day yethachu oru problem face pannitey than irunthom.
+                        Evlo naal unna pakka mudila unnoda senthu velila sapda mudila nu feel panniruken. Athukalam sethu 25 December Christmas anniku 
+                        namma meet panni neeyum nanum first time senthu panni poori saptom. Nee sapduratha first time nerla pathen. Avlo rasichen avlo.
+                    </div>
+                    <div class="photo-upload">
+                        <div class="polaroid">
+                            <img class="polaroid-image loaded" src="images/17.jpeg" alt="Memory">
+                            <div class="polaroid-caption">Our First Selfie after 3 years</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Stage 4: Beautiful Moments</div>
+                    <div class="timeline-text">
+                        Till Date yennoda phone la irukkura the best photo. Life la ivlo Happy ah for the first time yentha oru thoughts um pathi overthink
+                        pannama iruntha naal. Everyday yevlovo problems face panni veetuku varum bothu important ana oru vishiyam veetula nammala nimmathiya
+                        pathukura oru life partner. Yennaku antha oru nimathiyana oru feel oda oru sample 26 December 2025 nee yannaku kudutha cutie. 
+                    </div>
+                    <div class="photo-upload">
+                        <div class="polaroid">
+                            <img class="polaroid-image loaded" src="images/18.jpeg" alt="Memory">
+                            <div class="polaroid-caption">Forever Moments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Stage 5: Resuming Long Distance</div>
+                    <div class="timeline-text">
+                        27th December 2025, after spending 2 beautiful days together, Namma marubadithum long distance ku pona naal.
+                        These 3 days went like few seconds. Our First date may end but there are many more to come. Forever these moments 
+                        will be Special.
+                    </div>
+                    <div class="photo-upload">
+                        <div class="polaroid">
+                            <img class="polaroid-image loaded" src="images/19.jpeg" alt="Memory">
+                            <div class="polaroid-caption">Unforgettable Moments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destination -->
+        <div class="destination">  <div class="stamp">💝</div>
+            <div class="destination-icon">🎂</div>
+            <div class="destination-location">Happy Birthday Panda</div>
+            <div class="destination-text">
+                Till Today na avlo Happy ah irunthen, yentha oru past thoughts and future worries pathi overthink pannama iruntha naal. 
+                Thanks for everything panda. Happy Birthday Panda cutie.
+            </div>
+            <div class="destination-photos">
+                <div class="photo-upload">
+                    <div class="polaroid">
+                        <img class="polaroid-image loaded" src="images/20.jpeg" alt="Memory">
+                        <div class="polaroid-caption">Forever</div>
+                    </div>
+                </div>
+                <div class="photo-upload">
+                    <div class="polaroid">
+                        <img class="polaroid-image loaded" src="images/22.jpeg" alt="Memory">
+                        <div class="polaroid-caption">Always</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

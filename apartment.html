@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Apartment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Slab', serif;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    #3d2f28 0px,
+                    #3d2f28 2px,
+                    #4a3728 2px,
+                    #4a3728 4px,
+                    #3d2f28 4px,
+                    #3d2f28 6px,
+                    #5a4a3f 6px,
+                    #5a4a3f 8px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    #2a2220 0px,
+                    #2a2220 60px,
+                    #3a3228 60px,
+                    #3a3228 80px,
+                    #4a3228 80px,
+                    #4a3228 100px
+                );
+            background-size: 100% 8px, 100px 100%;
+            background-position: 0 0, 0 0;
+            color: #f5f1ed;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Dim moody vignette overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.6) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(90, 74, 63, 0.8);
+            border: 2px solid #c4a747;
+            color: #c4a747;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Roboto Slab', serif;
+            transition: all 0.3s ease;
+            z-index: 100;
+            font-weight: 700;
+        }
+
+        .back-btn:hover {
+            background: rgba(196, 167, 71, 0.2);
+            box-shadow: 0 0 15px rgba(196, 167, 71, 0.4);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 80px auto 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 52px;
+            color: #c4a747;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 32px;
+            color: #d4b857;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            border-left: 5px solid #c4a747;
+            padding-left: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #e8e4df;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(220px, 1fr));
+            gap: 50px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .poster-frame {
+            position: relative;
+            cursor: pointer;
+            transform: rotate(var(--poster-rotation));
+            transition: transform 0.3s ease;
+        }
+
+        .poster-frame:hover {
+            transform: rotate(calc(var(--poster-rotation) + 2deg)) translateY(-5px);
+        }
+
+        .poster {
+            background: white;
+            border: 1px solid #666;
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.8),
+                inset 0 0 0 15px #f5f1ed;
+            position: relative;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            border-image: linear-gradient(45deg, #8b7355, #5a4a3f, #8b7355) 1;
+        }
+
+        .poster::before,
+        .poster::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(90deg, 
+                rgba(200, 180, 140, 0.8) 0%,
+                rgba(200, 180, 140, 0.4) 50%,
+                rgba(200, 180, 140, 0.8) 100%);
+            z-index: 10;
+        }
+
+        /* Tape on top left */
+        .poster::before {
+            top: 10px;
+            left: 15px;
+            width: 50px;
+            height: 25px;
+            border-radius: 2px;
+            box-shadow: 
+                0 3px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: rotate(-8deg);
+        }
+
+        /* Tape on top right */
+        .poster::after {
+            top: 10px;
+            right: 15px;
+            width: 50px;
+            height: 25px;
+            border-radius: 2px;
+            box-shadow: 
+                0 3px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: rotate(8deg);
+        }
+
+        .poster-image {
+            width: 100%;
+            height: 85%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .poster-image.loaded {
+            display: block;
+        }
+
+        .poster-placeholder {
+            width: 100%;
+            height: 85%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8e4df, #d4ccc3);
+            color: #888;
+            font-size: 16px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .poster-caption {
+            width: 100%;
+            height: 15%;
+            background: #f5f1ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Torn edge effect */
+        .poster {
+            clip-path: polygon(
+                0 0, 2% 1%, 4% 0.5%, 6% 1.5%, 8% 0%, 10% 1%, 12% 0.5%, 14% 1%, 
+                16% 0%, 18% 1%, 20% 0%, 22% 1%, 24% 0%, 26% 1%, 28% 0%, 30% 1%,
+                32% 0%, 34% 1%, 36% 0%, 38% 1%, 40% 0%, 42% 1%, 44% 0%, 46% 1%,
+                48% 0%, 50% 1%, 52% 0%, 54% 1%, 56% 0%, 58% 1%, 60% 0%, 62% 1%,
+                64% 0%, 66% 1%, 68% 0%, 70% 1%, 72% 0%, 74% 1%, 76% 0%, 78% 1%,
+                80% 0%, 82% 1%, 84% 0%, 86% 1%, 88% 0%, 90% 1%, 92% 0%, 94% 1%, 96% 0%, 98% 1%, 100% 0%,
+                100% 2%, 99% 4%, 100% 6%, 99% 8%, 100% 10%, 99% 12%, 100% 14%,
+                99% 16%, 100% 18%, 99% 20%, 100% 22%, 99% 24%, 100% 26%, 99% 28%,
+                100% 30%, 99% 32%, 100% 34%, 99% 36%, 100% 38%, 99% 40%, 100% 42%,
+                99% 44%, 100% 46%, 99% 48%, 100% 50%, 99% 52%, 100% 54%, 99% 56%,
+                100% 58%, 99% 60%, 100% 62%, 99% 64%, 100% 66%, 99% 68%, 100% 70%,
+                99% 72%, 100% 74%, 99% 76%, 100% 78%, 99% 80%, 100% 82%, 99% 84%,
+                100% 86%, 99% 88%, 100% 90%, 99% 92%, 100% 94%, 99% 96%, 100% 98%, 100% 100%,
+                98% 99%, 96% 100%, 94% 99%, 92% 100%, 90% 99%, 88% 100%, 86% 99%,
+                84% 100%, 82% 99%, 80% 100%, 78% 99%, 76% 100%, 74% 99%, 72% 100%,
+                70% 99%, 68% 100%, 66% 99%, 64% 100%, 62% 99%, 60% 100%, 58% 99%,
+                56% 100%, 54% 99%, 52% 100%, 50% 99%, 48% 100%, 46% 99%, 44% 100%,
+                42% 99%, 40% 100%, 38% 99%, 36% 100%, 34% 99%, 32% 100%, 30% 99%,
+                28% 100%, 26% 99%, 24% 100%, 22% 99%, 20% 100%, 18% 99%, 16% 100%,
+                14% 99%, 12% 100%, 10% 99%, 8% 100%, 6% 99%, 4% 100%, 2% 99%, 0% 100%,
+                1% 98%, 0% 96%, 1% 94%, 0% 92%, 1% 90%, 0% 88%, 1% 86%,
+                0% 84%, 1% 82%, 0% 80%, 1% 78%, 0% 76%, 1% 74%, 0% 72%,
+                1% 70%, 0% 68%, 1% 66%, 0% 64%, 1% 62%, 0% 60%, 1% 58%,
+                0% 56%, 1% 54%, 0% 52%, 1% 50%, 0% 48%, 1% 46%, 0% 44%,
+                1% 42%, 0% 40%, 1% 38%, 0% 36%, 1% 34%, 0% 32%, 1% 30%,
+                0% 28%, 1% 26%, 0% 24%, 1% 22%, 0% 20%, 1% 18%, 0% 16%,
+                1% 14%, 0% 12%, 1% 10%, 0% 8%, 1% 6%, 0% 4%, 1% 2%
+            );
+        }
+
+        /* Curl effect at corner */
+        .poster-frame::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at bottom-right, rgba(0, 0, 0, 0.3), transparent);
+            border-radius: 0 0 0 100%;
+            z-index: 11;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">← BACK</button>
+
+    <div class="container">
+        <h1>🏠 INDIA BULLS</h1>
+
+        <p>Namma love start ana place. Namma manasu vitu pesuna oru place. First time neeyum nanum neraiya pesuna place.</p>
+
+        <h2>The Space We Shared</h2>
+        <p>Nee lonely ah kasta pata place intha INDIA BULLS. Unga periamma and her family yenna nenaichangaloo avanga avangaloda habit ku 
+            yetha mari than nee irukkanum nu olunga sapdu podama olunga care pannama unna avlo kasta paduthu nanga.
+        </p>
+
+        <p>Ivlo kasta patta unna heal pannurathuku and happy ah unnoda pesuratthuku unna pathukurathuku kadavul than yenna unna meet panna 
+            vachu irukkuraru. Neeyum nanum meet panna oru oru naalum nee pesura oru oru vaarthaiyum yennaku yevlo happiness kuduthu thu nu 
+            sollurathu ku varthaiye illa panda.
+        </p>
+
+        <h2>Our Favorite Spot</h2>
+        <p>Antha INDIA BULLS gate ku velila irukkura antha pathway than nambaloda love start ana place. Yevlo varusham ponalum antha spot
+            ah marakavey maten panda. Where ever I go that Place will always be special to me.
+        </p>
+
+        <div class="gallery">
+            <div class="poster-frame" style="--poster-rotation: -3deg;">
+                <div class="poster">
+                    <img class="poster-image loaded" src="images/11.jpeg" alt="Apartment Memory">
+                    <div class="poster-caption">My Birthday Meet</div>
+                </div>
+            </div>
+
+            <div class="poster-frame" style="--poster-rotation: 2deg;">
+                <div class="poster">
+                    <img class="poster-image loaded" src="images/12.jpeg" alt="Apartment Memory">
+                    <div class="poster-caption">Last day selfie at INDIA BULLS</div>
+                </div>
+            </div>
+
+            <div class="poster-frame" style="--poster-rotation: -1.5deg;">
+                <div class="poster">
+                    <img class="poster-image loaded" src="images/13.jpeg" alt="Apartment Memory">
+                    <div class="poster-caption">Day our distance increased</div>
+                </div>
+            </div>
+
+            <div class="poster-frame" style="--poster-rotation: 2.5deg;">
+                <div class="poster">
+                    <img class="poster-image loaded" src="images/14.jpeg" alt="Apartment Memory">
+                    <div class="poster-caption">Collage of our Memories.</div>
+                </div>
+            </div>
+        </div>
+
+        <p>These photos always remembered our special moments together in INDIA BULLS.</p>
+    </div>
+
+    <script>
+        // Add fade out animation for transitions
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

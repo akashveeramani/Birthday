@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Love Letter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: linear-gradient(135deg, #3d1a2d, #2a1a4f, #1a2a4f, #1a3f4f);
+            background-size: 400% 400%;
+            animation: colorShift 15s ease infinite;
+            color: #333;
+            transition: background 0.8s ease;
+        }
+
+        @keyframes colorShift {
+            0% {
+                background: linear-gradient(135deg, #3d1a2d, #2a1a4f, #1a2a4f, #1a3f4f);
+            }
+            25% {
+                background: linear-gradient(135deg, #2a1a4f, #1a2a4f, #1a3f4f, #2a4f3f);
+            }
+            50% {
+                background: linear-gradient(135deg, #1a2a4f, #1a3f4f, #2a4f3f, #4f4f1a);
+            }
+            75% {
+                background: linear-gradient(135deg, #1a3f4f, #2a4f3f, #4f4f1a, #4f3f1a);
+            }
+            100% {
+                background: linear-gradient(135deg, #3d1a2d, #2a1a4f, #1a2a4f, #1a3f4f);
+            }
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 192, 203, 0.6);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 192, 203, 0.3);
+            border-color: rgba(255, 192, 203, 1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(61, 26, 45, 0.8), rgba(42, 26, 79, 0.8));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 192, 203, 0.1) 1%, transparent 1%);
+            background-size: 50px 50px;
+            animation: bokehShift 20s ease infinite;
+            filter: blur(10px);
+        }
+
+        @keyframes bokehShift {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .typewriter-text {
+            font-size: 22px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.95);
+            font-style: italic;
+            min-height: 150px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Memory cards section */
+        .memories-section {
+            min-height: 100vh;
+            padding: 80px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .memories-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 80px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 192, 203, 0.5);
+        }
+
+        .memory-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .memory-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 192, 203, 0.3);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .memory-card:hover {
+            border-color: rgba(255, 192, 203, 0.8);
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.5), inset 0 0 20px rgba(255, 192, 203, 0.1);
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .card-teaser {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(255, 192, 203, 0.95);
+            color: #333;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .memory-card:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollBounce 2s infinite;
+            color: rgba(255, 192, 203, 0.8);
+            font-size: 20px;
+            z-index: 50;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .memories-title {
+                font-size: 32px;
+                margin-bottom: 40px;
+            }
+
+            .memory-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .memory-card {
+                padding: 30px 20px;
+            }
+
+            .hero {
+                padding: 60px 20px;
+                min-height: auto;
+            }
+
+            .typewriter-text {
+                font-size: 18px;
+            }
+
+            .tooltip {
+                white-space: normal;
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">← Back</button>
+
+    <!-- Next Chapter button (added) -->
+    <style>
+        .next-chapter {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            z-index: 60;
+            background: linear-gradient(90deg, #ffd6e0 0%, #e7d5ff 100%);
+            color: #3a2433;
+            padding: 14px 34px;
+            border-radius: 999px;
+            border: none;
+            font-size: 18px;
+            box-shadow: 0 8px 30px rgba(230,180,210,0.25), 0 2px 6px rgba(0,0,0,0.15) inset;
+            cursor: pointer;
+            transition: transform 200ms ease, box-shadow 200ms ease;
+            animation: floatY 3s ease-in-out infinite;
+            backdrop-filter: blur(6px);
+        }
+
+        @keyframes floatY {
+            0% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+            100% { transform: translateX(-50%) translateY(0); }
+        }
+
+        .next-chapter::after {
+            content: '';
+            position: absolute;
+            left: -30%; top: -30%; right: -30%; bottom: -30%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.02) 60%, rgba(255,255,255,0.0) 100%);
+            transform: skewX(-20deg) translateX(-120%);
+            transition: transform 0.9s ease;
+            border-radius: 999px;
+            pointer-events: none;
+        }
+
+        .next-chapter:hover { box-shadow: 0 14px 40px rgba(230,180,210,0.35); }
+        .next-chapter:hover::after { transform: skewX(-20deg) translateX(120%); }
+
+        @media (max-width: 768px) {
+            .next-chapter { padding: 12px 24px; font-size: 16px; bottom: 20px; }
+        }
+    </style>
+
+    <!-- Section 1: Hero with typewriter -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="typewriter-text" id="typewriter"></div>
+        </div>
+    </section>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">↓ Scroll ↓</div>
+
+    <!-- Section 2: Memory Cards -->
+    <section class="memories-section">
+        <h2 class="memories-title">Our Cherished Memories</h2>
+        <div class="memory-cards">
+            <div class="memory-card" onclick="navigateTo('school.html')">
+                <div class="card-icon">🎓</div>
+                <div class="card-title">Our School Days</div>
+                <div class="card-teaser">Where our story began, to look so beautiful together</div>
+                <div class="tooltip">Click to explore our school memories</div>
+            </div>
+
+            <div class="memory-card" onclick="navigateTo('apartment.html')">
+                <div class="card-icon">🏠</div>
+                <div class="card-title">India Bulls</div>
+                <div class="card-teaser">Place where are forever started.</div>
+                <div class="tooltip">Click to revisit our cozy home</div>
+            </div>
+
+            <div class="memory-card" onclick="navigateTo('farewell.html')">
+                <div class="card-icon">🎉</div>
+                <div class="card-title">Farewell Night</div>
+                <div class="card-teaser">The bittersweet celebration we'll never forget</div>
+                <div class="tooltip">Click to relive the farewell moments</div>
+            </div>
+
+            <div class="memory-card" onclick="navigateTo('journey.html')">
+                <div class="card-icon">✈️</div>
+                <div class="card-title">First Date Journey</div>
+                <div class="card-teaser">Tough Journey to be with you for a Day.</div>
+                <div class="tooltip">Click to trace our journey</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Next Chapter button placed after memories -->
+    <button class="next-chapter" id="nextChapter">Next Chapter →</button>
+
+    <script>
+        // Typewriter effect
+        const text = `Panda kutty HAPPY BIRTHDAY! 🎉🎂 cutie. 
+        Life long ah yeppayummey santhosama sirippodu 100 varusam na ungala pathukuren.
+        Unnoda life la neepata kasta yellathukum nee atha vida 1000 times unna Happy ah pathukuren.`;
+        let index = 0;
+        const typewriterElement = document.getElementById('typewriter');
+
+        function typeWriter() {
+            if (index < text.length) {
+                typewriterElement.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 80);
+            }
+        }
+
+        // Start typewriter on page load
+        window.addEventListener('load', typeWriter);
+
+        // Color-changing scroll animation
+        let currentColorIndex = 0;
+        const colors = [
+            'linear-gradient(135deg, #3d1a2d, #2a1a4f, #1a2a4f, #1a3f4f)',
+            'linear-gradient(135deg, #2a1a4f, #1a2a4f, #1a3f4f, #2a4f3f)',
+            'linear-gradient(135deg, #1a2a4f, #1a3f4f, #2a4f3f, #4f4f1a)',
+            'linear-gradient(135deg, #1a3f4f, #2a4f3f, #4f4f1a, #4f3f1a)',
+            'linear-gradient(135deg, #4f3f1a, #4f4f1a, #3d1a2d, #2a1a4f)'
+        ];
+
+        window.addEventListener('scroll', function() {
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const colorIndex = Math.floor((scrollPercent / 100) * colors.length);
+            
+            if (colorIndex < colors.length) {
+                document.body.style.background = colors[colorIndex];
+            }
+        });
+
+        // Navigation with fade effect
+        function navigateTo(page) {
+            document.body.style.animation = 'fadeOut 0.5s ease-out forwards';
+            setTimeout(() => {
+                window.location.href = page;
+            }, 500);
+        }
+
+        // Add fade out animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 3D tilt effect on memory cards
+        const cards = document.querySelectorAll('.memory-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Next chapter navigation: fade out then go to page3
+        const nextBtn = document.getElementById('nextChapter');
+        nextBtn.addEventListener('click', () => {
+            document.body.style.transition = 'opacity 0.8s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => { window.location.href = 'page3.html'; }, 800);
+        });
+    </script>
+</body>
+</html>

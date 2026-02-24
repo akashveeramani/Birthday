@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Memories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Caveat', cursive;
+            background: linear-gradient(90deg, 
+                #fffaf0 0%,
+                #fffaf0 95%,
+                #ff6b6b 95%,
+                #ff6b6b 100%);
+            background-attachment: fixed;
+            color: #333;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        /* Ruled paper lines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 50px,
+                #4a90e2 39px,
+                #4a90e2 40px
+            );
+            background-size: 100% 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Red margin line */
+        body::after {
+            content: '';
+            position: fixed;
+            left: 80px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #c92a2a;
+            z-index: 1;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 80px;
+            background: #fffaf0;
+            border: 2px solid #c92a2a;
+            color: #c92a2a;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Caveat', cursive;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 60px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #c92a2a;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 700;
+            transform: rotate(-1deg);
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #333;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            transform: rotate(0.5deg);
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 24px;
+            line-height: 2;
+            margin-bottom: 20px;
+            transform: rotate(var(--rotation));
+            color: #333;
+        }
+
+        .billboards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(280px, 1fr));
+            gap: 100px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .billboard {
+            position: relative;
+            cursor: pointer;
+            transform: rotate(var(--billboard-rotation));
+            transition: transform 0.3s ease;
+        }
+
+        .billboard:hover {
+            transform: rotate(calc(var(--billboard-rotation) + 2deg)) scale(1.05);
+        }
+
+        .billboard-frame {
+            background: white;
+            border: 20px solid #1a1a1a;
+            border-radius: 8px;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            filter: sepia(0.1) contrast(1.1);
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% {
+                transform: rotate(-0.5deg);
+            }
+            50% {
+                transform: rotate(0.5deg);
+            }
+        }
+
+        .billboard-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #f3f3f3;
+            display: none;
+        }
+
+        .billboard-image.loaded {
+            display: block;
+        }
+
+        .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            color: #999;
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .metal-post {
+            position: absolute;
+            bottom: -30px;
+            left: 30%;
+            width: 40%;
+            height: 30px;
+            background: linear-gradient(180deg, #666, #333);
+            border-radius: 0 0 4px 4px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .metal-post::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 10%;
+            right: 10%;
+            height: 10px;
+            background: linear-gradient(180deg, #444, #222);
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+                background: linear-gradient(90deg, 
+                    #fffaf0 0%,
+                    #fffaf0 90%,
+                    #ff6b6b 90%,
+                    #ff6b6b 100%);
+            }
+
+            .back-btn {
+                left: 70px;
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            p {
+                font-size: 20px;
+            }
+
+            .billboards {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">← Back</button>
+
+    <div class="container">
+        <h1>📓Our School Days</h1>
+
+        <p style="--rotation: -0.5deg;">Vera vera lifestyle la vara vara problems ooda iruntha namma rendu peraiyum sethu vacha oru 
+            place. Nammbaloda school 'SJPS'. Yennaku yenna ney therila nammaloda school chinna vayasula irunthey avlova pudikkathu. 
+            Ana appadi pudikatha place la than yennaku yennoda life ye azhaga mathuna pondati kedaicha.</p>
+
+        <p style="--rotation: -0.5deg;">Namma yetho oru random information kekapoi start ana oru formal friendship. Konja konjama kadhal 
+            ah maruchu. Nee oru naal random ah call pannu azhutha unnoda first lover pathi nenaichu. Yennaku nee azhutha tha ketathum
+        yennaku yenna pannurathu ney therila. Ippo varaiyum antha naal la yennku iruntha feeling express pannavey mudiyathu. Antha oru nimisham 
+        yenna unna love pannvachuthu Panda. </p>
+
+        <h2 style="color: #4a90e2;">Our Unforgettable Memories</h2>
+
+        <p style="--rotation: 0.3deg;">"21th October 2022" - Namma first time oru kutty date india bulls ku munnadi irukkura kadaila nee yennaku string vangi
+            kuduthathu. First time yennaku oru ponnu yetho onnu vangi kudutha naal. Yennoda pondati vangi kuduthaa naal. </p>
+
+        <p style="--rotation: -0.2deg;">The next week namma rendu perum for the first time yennoda scooty la print yeduka onna poona moment.</p>
+
+        <p style="--rotation: -0.2deg;">First time nee na vasanth night 2o'clock varaiyum pesuna oru call. Yenna pesunom nu la nyabagathula
+            illa ana anniku na nalla happy ah thungunen. Yennaku life long ah yennoda kastatha kekurathu oru nalla friend kedachuta nu.
+            Na patta happiness ku words la express ye panna mudiyathu cutie.
+        </p>
+
+        <h2>Photo Memories</h2>
+        <p style="--rotation: 0.4deg;">Namma school time la irukkura nalla photos ithu than so see and enjoy.</p>
+
+        <div class="billboards">
+            <div class="billboard" style="--billboard-rotation: -2deg;">
+                <div class="billboard-frame">
+                    <img class="billboard-image loaded" src="images/7.jpeg" alt="School Memory" onerror="this.onerror=null;this.src='https://picsum.photos/400/300?random=7'">
+                </div>
+                <div class="metal-post"></div>
+            </div>
+
+            <div class="billboard" style="--billboard-rotation: 1deg;">
+                <div class="billboard-frame">
+                    <img class="billboard-image loaded" src="images/8.jpeg" alt="School Memory" onerror="this.onerror=null;this.src='https://picsum.photos/400/300?random=8'">
+                </div>
+                <div class="metal-post"></div>
+            </div>
+
+            <div class="billboard" style="--billboard-rotation: -1.5deg;">
+                <div class="billboard-frame">
+                    <img class="billboard-image loaded" src="images/9.jpeg" alt="School Memory" onerror="this.onerror=null;this.src='https://picsum.photos/400/300?random=9'">
+                </div>
+                <div class="metal-post"></div>
+            </div>
+
+            <div class="billboard" style="--billboard-rotation: 2deg;">
+                <div class="billboard-frame">
+                    <img class="billboard-image loaded" src="images/10.jpeg" alt="School Memory" onerror="this.onerror=null;this.src='https://picsum.photos/400/300?random=10'">
+                </div>
+                <div class="metal-post"></div>
+            </div>
+        </div>
+
+        <p style="--rotation: -0.3deg;">These photos will forever remind me of the beautiful days we spent together in school. Each moment, each laugh, each conversation - they all mean the world to me.</p>
+    </div>
+
+    <script>
+        // Add fade out animation for transitions
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
